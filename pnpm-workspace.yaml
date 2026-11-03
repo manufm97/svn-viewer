@@ -1,0 +1,6 @@
+# Configuración de pnpm (pnpm ≥ 11 alberga aquí los ajustes que antes iban en package.json).
+# allowBuilds: paquetes con scripts de instalación (postinstall) autorizados a ejecutarse.
+allowBuilds:
+  electron: true
+  esbuild: true
+  electron-winstaller: true
