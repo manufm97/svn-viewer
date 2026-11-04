@@ -831,7 +831,7 @@ select {
   background: var(--surface-hover);
 }
 
-.col-name {
+td.col-name {
   display: flex;
   align-items: center;
   gap: 9px;

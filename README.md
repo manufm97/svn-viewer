@@ -33,6 +33,36 @@ como backend: sin servidores intermedios, sin dependencias de WebDAV propias.
 - Ventana *frameless* con controles propios, barra de progreso durante las
   peticiones y banner global de errores.
 
+## Capturas
+
+**Navegador de ficheros** — tabla con nombre, último commit (revisión y autor) y tiempo relativo:
+
+![Vista de árbol](docs/screenshots/arbol.png)
+
+**Visor de código** — resaltado de sintaxis, números de línea y cabecera con revisión y autor:
+
+![Visor de código](docs/screenshots/visor.png)
+
+**Blame** — autor y revisión por línea:
+
+![Blame](docs/screenshots/blame.png)
+
+**Historial del repositorio** — mensaje, autor, fecha y revisión de cada commit:
+
+![Historial](docs/screenshots/historial.png)
+
+**Diff lado a lado** entre dos revisiones:
+
+![Diff lado a lado](docs/screenshots/diff-lado-a-lado.png)
+
+**Diff unificado** con colapso de contexto:
+
+![Diff unificado](docs/screenshots/diff-unificado.png)
+
+**Tema GitLab Clásico** (idioma inglés):
+
+![Árbol con tema GitLab Clásico](docs/screenshots/arbol-gitlab-light.png)
+
 ## Requisitos
 
 | Requisito | Detalle |
@@ -63,14 +93,15 @@ pnpm build
 pnpm start
 
 # 5. Empaquetado: carpeta con `SVN Viewer.exe` (icono `app.ico`)
-pnpm dist             # release\SVN Viewer-win32-x64\
-pnpm dist:nsis        # instalador NSIS (opcional)
+pnpm dist             # release\SVN Viewer-win32-x64\SVN Viewer.exe (portable)
+pnpm dist:nsis        # release\SVN Viewer Setup <versión>.exe (instalador NSIS)
 pnpm dist:dir         # sólo la carpeta desempaquetada, vía electron-builder
 ```
 
-`pnpm dist` replica el build de [tomcat-launcher](../tomcat-launcher):
-empaqueta en un directorio temporal **fuera** del proyecto (evita el EBUSY de
-CrowdStrike) y copia el resultado con `robocopy /MIR` a `release/`.
+`pnpm dist` empaqueta en un directorio temporal **fuera** del proyecto (evita el
+EBUSY de CrowdStrike) y copia el resultado con `robocopy /MIR` a `release/`. La
+versión sale de `package.json`: actualízala antes de generar una release nueva.
+La carpeta `release/` está en `.gitignore`.
 
 ### Smoke test (captura automática)
 
@@ -87,6 +118,14 @@ node scripts/smoke.js --lang en --theme gitlab-light --out captura.png
 Variables que consume el script de smoke: `SMOKE_SHOT`, `SMOKE_ROUTE`,
 `SMOKE_DEBUG` (vuelca el texto de la UI a consola), `SVN_REPO_URL`, `SVN_LANG`,
 `SVN_THEME`.
+
+Las capturas de `docs/screenshots/` se regeneran con `pnpm build` seguido de
+`node scripts/smoke.js` con `--out` apuntando a la carpeta. Los smoke test de
+`--route /tree` y `--route "/blob?path=src/app.js"` necesitan el mismo
+repositorio de prueba que crea el script.
+
+Las vistas de **Abrir proyecto** y **Explorador** se capturaron a mano: el smoke
+no abre esos diálogos.
 
 ## Configuración
 
@@ -140,6 +179,7 @@ src/               Renderer Vue 3 + Vite
   diff-utils.js    Parser del diff unificado + jsdiff para fichero único
   views/           TreeView, BlobView, BlameView, LogView, DiffView
   styles.css       Estilos (sólo usa variables de los temas)
+docs/screenshots/  Capturas usadas en este README
 scripts/
   dev.js           Arranque Vite + Electron
   smoke.js         Captura automática contra un repo de prueba
